@@ -24,8 +24,9 @@ namespace ISM6225_Spring_2024_Assignment_2
             Console.WriteLine("Question 2:");
             int[] nums2 = { 0, 1, 0, 3, 12 };
             IList<int> resultAfterMovingZero = MoveZeroes(nums2);
-            string combinationsString = ConvertIListToArray(resultAfterMovingZero);
+            string combinationsString = ConvertIListToArray(new List<int>(resultAfterMovingZero)); 
             Console.WriteLine(combinationsString);
+
 
             //Question 3:
             Console.WriteLine("Question 3:");
@@ -99,8 +100,23 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                
+                if (nums.Length == 0)
+                    return 0;
+
+                int uniqueCount = 1;
+
+                for (int i = 1; i < nums.Length; i++)
+                {
+               
+                    if (nums[i] != nums[uniqueCount - 1])
+                    {
+                        nums[uniqueCount] = nums[i];
+                        uniqueCount++;
+                    }
+                }
+
+                return uniqueCount;
             }
             catch (Exception)
             {
@@ -134,14 +150,36 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return new List<int>();
+                int lastNonZeroFoundAt = 0;
+
+                for (int cur = 0; cur < nums.Length; cur++)
+                {
+                    if (nums[cur] != 0)
+                    {
+                        if (cur > lastNonZeroFoundAt)
+                        {
+                            int temp = nums[cur];
+                            nums[cur] = nums[lastNonZeroFoundAt];
+                            nums[lastNonZeroFoundAt] = temp;
+                        }
+
+                        lastNonZeroFoundAt++;
+                    }
+                }
+
+                
+                return new List<int>(nums); 
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+
+
+
+
 
         /*
 
@@ -180,168 +218,230 @@ namespace ISM6225_Spring_2024_Assignment_2
         -105 <= nums[i] <= 105
 
         */
-
         public static IList<IList<int>> ThreeSum(int[] nums)
         {
-            try
-            {
-                // Write your code here and you can modify the return value according to the requirements
-                return new List<IList<int>>();
+            Array.Sort(nums);
+
+            IList<IList<int>> triplets = new List<IList<int>>();
+            for (int i = 0; i < nums.Length - 2; i++)
+            { 
+                if (i > 0 && nums[i] == nums[i - 1])
+                {
+                    continue;
+                }
+
+                int target = -nums[i]; 
+                int left = i + 1;
+                int right = nums.Length - 1;
+
+                while (left < right)
+                {
+                    int sum = nums[left] + nums[right];
+                    if (sum == target)
+                    {
+                        triplets.Add(new List<int>() { nums[i], nums[left], nums[right] });
+                        left++;
+                        right--;
+
+                        while (left < right && nums[left] == nums[left - 1])
+                        {
+                            left++;
+                        }
+                        while (left < right && nums[right] == nums[right + 1])
+                        {
+                            right--;
+                        }
+                    }
+                    else if (sum < target)
+                    {
+                        left++;
+                    }
+                    else
+                    {
+                        right--;
+                    }
+                }
             }
-            catch (Exception)
-            {
-                throw;
-            }
+
+            return triplets;
         }
 
-        /*
 
-        Question 4:
-        Given a binary array nums, return the maximum number of consecutive 1's in the array.
+    /*
 
-        Example 1:
+    Question 4:
+    Given a binary array nums, return the maximum number of consecutive 1's in the array.
 
-        Input: nums = [1,1,0,1,1,1]
-        Output: 3
-        Explanation: The first two digits or the last three digits are consecutive 1s. The maximum number of consecutive 1s is 3.
-        Example 2:
+    Example 1:
 
-        Input: nums = [1,0,1,1,0,1]
-        Output: 2
- 
-        Constraints:
+    Input: nums = [1,1,0,1,1,1]
+    Output: 3
+    Explanation: The first two digits or the last three digits are consecutive 1s. The maximum number of consecutive 1s is 3.
+    Example 2:
 
-        1 <= nums.length <= 105
-        nums[i] is either 0 or 1.
+    Input: nums = [1,0,1,1,0,1]
+    Output: 2
 
-        */
+    Constraints:
 
-        public static int FindMaxConsecutiveOnes(int[] nums)
+    1 <= nums.length <= 105
+    nums[i] is either 0 or 1.
+
+    */
+
+    public static int FindMaxConsecutiveOnes(int[] nums)
+    {
+        int maxConsecutiveOnes = 0;
+        int currentConsecutiveOnes = 0;
+
+        for (int i = 0; i < nums.Length; i++)
         {
-            try
+            if (nums[i] == 1)
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                currentConsecutiveOnes++;
             }
-            catch (Exception)
+            else
             {
-                throw;
+                maxConsecutiveOnes = Math.Max(maxConsecutiveOnes, currentConsecutiveOnes);
+                currentConsecutiveOnes = 0;
             }
         }
 
-        /*
+        maxConsecutiveOnes = Math.Max(maxConsecutiveOnes, currentConsecutiveOnes);
 
-        Question 5:
-        You are tasked with writing a program that converts a binary number to its equivalent decimal representation without using bitwise operators or the `Math.Pow` function. You will implement a function called `BinaryToDecimal` which takes an integer representing a binary number as input and returns its decimal equivalent. 
-
-        Requirements:
-        1. Your program should prompt the user to input a binary number as an integer. 
-        2. Implement the `BinaryToDecimal` function, which takes the binary number as input and returns its decimal equivalent. 
-        3. Avoid using bitwise operators (`<<`, `>>`, `&`, `|`, `^`) and the `Math.Pow` function for any calculations. 
-        4. Use only basic arithmetic operations such as addition, subtraction, multiplication, and division. 
-        5. Ensure the program displays the input binary number and its corresponding decimal value.
-
-        Example 1:
-        Input: num = 101010
-        Output: 42
+        return maxConsecutiveOnes;
+    }
 
 
-        Constraints:
+    /*
 
-        1 <= num <= 10^9
+    Question 5:
+    You are tasked with writing a program that converts a binary number to its equivalent decimal representation without using bitwise operators or the `Math.Pow` function. You will implement a function called `BinaryToDecimal` which takes an integer representing a binary number as input and returns its decimal equivalent. 
 
-        */
+    Requirements:
+    1. Your program should prompt the user to input a binary number as an integer. 
+    2. Implement the `BinaryToDecimal` function, which takes the binary number as input and returns its decimal equivalent. 
+    3. Avoid using bitwise operators (`<<`, `>>`, `&`, `|`, `^`) and the `Math.Pow` function for any calculations. 
+    4. Use only basic arithmetic operations such as addition, subtraction, multiplication, and division. 
+    5. Ensure the program displays the input binary number and its corresponding decimal value.
 
-        public static int BinaryToDecimal(int binary)
+    Example 1:
+    Input: num = 101010
+    Output: 42
+
+
+    Constraints:
+
+    1 <= num <= 10^9
+
+    */
+
+    public static int BinaryToDecimal(int binary)
+    {
+        int decimalValue = 0;
+        int placeValue = 1;
+
+        while (binary > 0)
         {
-            try
-            {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            int digit = binary % 10;
+            decimalValue += digit * placeValue;
+            placeValue *= 2;
+            binary /= 10;
         }
 
-        /*
+        return decimalValue;
+    }
 
-        Question:6
-        Given an integer array nums, return the maximum difference between two successive elements in its sorted form. If the array contains less than two elements, return 0.
-        You must write an algorithm that runs in linear time and uses linear extra space.
 
-        Example 1:
+    /*
 
-        Input: nums = [3,6,9,1]
-        Output: 3
-        Explanation: The sorted form of the array is [1,3,6,9], either (3,6) or (6,9) has the maximum difference 3.
-        Example 2:
+    Question:6
+    Given an integer array nums, return the maximum difference between two successive elements in its sorted form. If the array contains less than two elements, return 0.
+    You must write an algorithm that runs in linear time and uses linear extra space.
 
-        Input: nums = [10]
-        Output: 0
-        Explanation: The array contains less than 2 elements, therefore return 0.
- 
+    Example 1:
 
-        Constraints:
+    Input: nums = [3,6,9,1]
+    Output: 3
+    Explanation: The sorted form of the array is [1,3,6,9], either (3,6) or (6,9) has the maximum difference 3.
+    Example 2:
 
-        1 <= nums.length <= 105
-        0 <= nums[i] <= 109
+    Input: nums = [10]
+    Output: 0
+    Explanation: The array contains less than 2 elements, therefore return 0.
 
-        */
 
-        public static int MaximumGap(int[] nums)
+    Constraints:
+
+    1 <= nums.length <= 105
+    0 <= nums[i] <= 109
+
+    */
+
+    public static int MaximumGap(int[] nums)
+    {
+        if (nums.Length < 2)
         {
-            try
-            {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return 0;
         }
 
-        /*
+        Array.Sort(nums);
 
-        Question:7
-        Given an integer array nums, return the largest perimeter of a triangle with a non-zero area, formed from three of these lengths. If it is impossible to form any triangle of a non-zero area, return 0.
+        int maxGap = 0;
 
-        Example 1:
-
-        Input: nums = [2,1,2]
-        Output: 5
-        Explanation: You can form a triangle with three side lengths: 1, 2, and 2.
-        Example 2:
-
-        Input: nums = [1,2,1,10]
-        Output: 0
-        Explanation: 
-        You cannot use the side lengths 1, 1, and 2 to form a triangle.
-        You cannot use the side lengths 1, 1, and 10 to form a triangle.
-        You cannot use the side lengths 1, 2, and 10 to form a triangle.
-        As we cannot use any three side lengths to form a triangle of non-zero area, we return 0.
-
-        Constraints:
-
-        3 <= nums.length <= 104
-        1 <= nums[i] <= 106
-
-        */
-
-        public static int LargestPerimeter(int[] nums)
+        for (int i = 1; i < nums.Length; i++)
         {
-            try
+            maxGap = Math.Max(maxGap, nums[i] - nums[i - 1]);
+        }
+
+        return maxGap;
+    }
+
+
+
+    /*
+
+    Question:7
+    Given an integer array nums, return the largest perimeter of a triangle with a non-zero area, formed from three of these lengths. If it is impossible to form any triangle of a non-zero area, return 0.
+
+    Example 1:
+
+    Input: nums = [2,1,2]
+    Output: 5
+    Explanation: You can form a triangle with three side lengths: 1, 2, and 2.
+    Example 2:
+
+    Input: nums = [1,2,1,10]
+    Output: 0
+    Explanation: 
+    You cannot use the side lengths 1, 1, and 2 to form a triangle.
+    You cannot use the side lengths 1, 1, and 10 to form a triangle.
+    You cannot use the side lengths 1, 2, and 10 to form a triangle.
+    As we cannot use any three side lengths to form a triangle of non-zero area, we return 0.
+
+    Constraints:
+
+    3 <= nums.length <= 104
+    1 <= nums[i] <= 106
+
+    */
+
+    public static int LargestPerimeter(int[] nums)
+    {
+        Array.Sort(nums);
+
+        for (int i = nums.Length - 1; i >= 2; i--)
+        {
+            if (nums[i - 2] + nums[i - 1] > nums[i])
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
-            }
-            catch (Exception)
-            {
-                throw;
+                return nums[i - 2] + nums[i - 1] + nums[i];
             }
         }
+
+        return 0; 
+    }
+
+
 
         /*
 
@@ -354,7 +454,7 @@ namespace ISM6225_Spring_2024_Assignment_2
 
         A substring is a contiguous sequence of characters in a string.
 
- 
+
 
         Example 1:
 
@@ -388,14 +488,24 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return "";
+                while (s.Contains(part))
+                {
+                    int index = s.IndexOf(part);
+                 
+                    if (index != -1)
+                    {
+                        s = s.Remove(index, part.Length);
+                    }
+                }
+                return s;
             }
             catch (Exception)
             {
                 throw;
             }
         }
+
+
 
         /* Inbuilt Functions - Don't Change the below functions */
         static string ConvertIListToNestedList(IList<IList<int>> input)
