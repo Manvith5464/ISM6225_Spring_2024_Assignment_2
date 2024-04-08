@@ -100,29 +100,36 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                
+                // Check if the input array is empty
                 if (nums.Length == 0)
                     return 0;
 
+                // Initialize a variable to count unique elements
                 int uniqueCount = 1;
 
+                // Iterate through the array starting from the second element
                 for (int i = 1; i < nums.Length; i++)
                 {
-               
+                    // Check if the current element is different from the previous unique element
                     if (nums[i] != nums[uniqueCount - 1])
                     {
+                        // If it's different, replace the next unique position with the current element
                         nums[uniqueCount] = nums[i];
+                        // Increment the unique count
                         uniqueCount++;
                     }
                 }
 
+                // Return the count of unique elements
                 return uniqueCount;
             }
             catch (Exception)
             {
+                // If an exception occurs, rethrow it
                 throw;
             }
         }
+
 
         /*
         
@@ -150,31 +157,39 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
+                // Initialize variable to keep track of the index of the last non-zero element
                 int lastNonZeroFoundAt = 0;
 
+                // Loop through the array
                 for (int cur = 0; cur < nums.Length; cur++)
                 {
+                    // If the current element is not zero
                     if (nums[cur] != 0)
                     {
+                        // If the current index is greater than the index of the last non-zero element
                         if (cur > lastNonZeroFoundAt)
                         {
+                            // Swap the current non-zero element with the last non-zero element
                             int temp = nums[cur];
                             nums[cur] = nums[lastNonZeroFoundAt];
                             nums[lastNonZeroFoundAt] = temp;
                         }
 
+                        // Increment the index of the last non-zero element
                         lastNonZeroFoundAt++;
                     }
                 }
 
-                
-                return new List<int>(nums); 
+                // Convert the modified array to a list and return
+                return new List<int>(nums);
             }
             catch (Exception)
             {
+                // If any exception occurs, rethrow it
                 throw;
             }
         }
+
 
 
 
@@ -220,29 +235,44 @@ namespace ISM6225_Spring_2024_Assignment_2
         */
         public static IList<IList<int>> ThreeSum(int[] nums)
         {
+            // Sorting the input array simplifies the process of finding triplets
             Array.Sort(nums);
 
+            // Initialize a list to store the triplets
             IList<IList<int>> triplets = new List<IList<int>>();
+
+            // Iterate through the array, considering each element as the potential first element of a triplet
             for (int i = 0; i < nums.Length - 2; i++)
-            { 
+            {
+                // Skip duplicates of the first element to avoid duplicates in the triplets
                 if (i > 0 && nums[i] == nums[i - 1])
                 {
                     continue;
                 }
 
-                int target = -nums[i]; 
+                // Calculate the target value that the pair of elements should sum up to
+                int target = -nums[i];
+
+                // Initialize two pointers to find the other two elements of the triplet
                 int left = i + 1;
                 int right = nums.Length - 1;
 
+                // Iterate through the remaining elements using two pointers approach
                 while (left < right)
                 {
+                    // Calculate the sum of the current pair of elements
                     int sum = nums[left] + nums[right];
+
+                    // If the sum equals the target, add the triplet to the list
                     if (sum == target)
                     {
                         triplets.Add(new List<int>() { nums[i], nums[left], nums[right] });
+
+                        // Move the pointers to the next distinct elements
                         left++;
                         right--;
 
+                        // Skip duplicates of left and right elements to avoid duplicates in the triplets
                         while (left < right && nums[left] == nums[left - 1])
                         {
                             left++;
@@ -252,10 +282,12 @@ namespace ISM6225_Spring_2024_Assignment_2
                             right--;
                         }
                     }
+                    // If the sum is less than the target, move the left pointer to the right
                     else if (sum < target)
                     {
                         left++;
                     }
+                    // If the sum is greater than the target, move the right pointer to the left
                     else
                     {
                         right--;
@@ -263,183 +295,223 @@ namespace ISM6225_Spring_2024_Assignment_2
                 }
             }
 
+            // Return the list of triplets
             return triplets;
         }
 
 
-    /*
+        /*
 
-    Question 4:
-    Given a binary array nums, return the maximum number of consecutive 1's in the array.
+        Question 4:
+        Given a binary array nums, return the maximum number of consecutive 1's in the array.
 
-    Example 1:
+        Example 1:
 
-    Input: nums = [1,1,0,1,1,1]
-    Output: 3
-    Explanation: The first two digits or the last three digits are consecutive 1s. The maximum number of consecutive 1s is 3.
-    Example 2:
+        Input: nums = [1,1,0,1,1,1]
+        Output: 3
+        Explanation: The first two digits or the last three digits are consecutive 1s. The maximum number of consecutive 1s is 3.
+        Example 2:
 
-    Input: nums = [1,0,1,1,0,1]
-    Output: 2
+        Input: nums = [1,0,1,1,0,1]
+        Output: 2
 
-    Constraints:
+        Constraints:
 
-    1 <= nums.length <= 105
-    nums[i] is either 0 or 1.
+        1 <= nums.length <= 105
+        nums[i] is either 0 or 1.
 
-    */
+        */
 
-    public static int FindMaxConsecutiveOnes(int[] nums)
-    {
-        int maxConsecutiveOnes = 0;
-        int currentConsecutiveOnes = 0;
-
-        for (int i = 0; i < nums.Length; i++)
+        public static int FindMaxConsecutiveOnes(int[] nums)
         {
-            if (nums[i] == 1)
+            // Initialize variables to keep track of maximum consecutive ones
+            int maxConsecutiveOnes = 0; // Holds the overall maximum consecutive ones found
+            int currentConsecutiveOnes = 0; // Holds the current consecutive ones being counted
+
+            // Iterate through the input array
+            for (int i = 0; i < nums.Length; i++)
             {
-                currentConsecutiveOnes++;
+                // If the current element is 1, increment the count of consecutive ones
+                if (nums[i] == 1)
+                {
+                    currentConsecutiveOnes++;
+                }
+                // If the current element is not 1 (i.e., it's 0), update maxConsecutiveOnes if necessary
+                else
+                {
+                    // Update maxConsecutiveOnes with the larger of its current value and currentConsecutiveOnes
+                    maxConsecutiveOnes = Math.Max(maxConsecutiveOnes, currentConsecutiveOnes);
+                    // Reset the count of consecutive ones for the next sequence
+                    currentConsecutiveOnes = 0;
+                }
             }
-            else
-            {
-                maxConsecutiveOnes = Math.Max(maxConsecutiveOnes, currentConsecutiveOnes);
-                currentConsecutiveOnes = 0;
-            }
+
+            // Update maxConsecutiveOnes with the larger of its current value and currentConsecutiveOnes
+            maxConsecutiveOnes = Math.Max(maxConsecutiveOnes, currentConsecutiveOnes);
+
+            // Return the maximum consecutive ones found in the input array
+            return maxConsecutiveOnes;
         }
 
-        maxConsecutiveOnes = Math.Max(maxConsecutiveOnes, currentConsecutiveOnes);
-
-        return maxConsecutiveOnes;
-    }
 
 
-    /*
+        /*
 
-    Question 5:
-    You are tasked with writing a program that converts a binary number to its equivalent decimal representation without using bitwise operators or the `Math.Pow` function. You will implement a function called `BinaryToDecimal` which takes an integer representing a binary number as input and returns its decimal equivalent. 
+        Question 5:
+        You are tasked with writing a program that converts a binary number to its equivalent decimal representation without using bitwise operators or the `Math.Pow` function. You will implement a function called `BinaryToDecimal` which takes an integer representing a binary number as input and returns its decimal equivalent. 
 
-    Requirements:
-    1. Your program should prompt the user to input a binary number as an integer. 
-    2. Implement the `BinaryToDecimal` function, which takes the binary number as input and returns its decimal equivalent. 
-    3. Avoid using bitwise operators (`<<`, `>>`, `&`, `|`, `^`) and the `Math.Pow` function for any calculations. 
-    4. Use only basic arithmetic operations such as addition, subtraction, multiplication, and division. 
-    5. Ensure the program displays the input binary number and its corresponding decimal value.
+        Requirements:
+        1. Your program should prompt the user to input a binary number as an integer. 
+        2. Implement the `BinaryToDecimal` function, which takes the binary number as input and returns its decimal equivalent. 
+        3. Avoid using bitwise operators (`<<`, `>>`, `&`, `|`, `^`) and the `Math.Pow` function for any calculations. 
+        4. Use only basic arithmetic operations such as addition, subtraction, multiplication, and division. 
+        5. Ensure the program displays the input binary number and its corresponding decimal value.
 
-    Example 1:
-    Input: num = 101010
-    Output: 42
+        Example 1:
+        Input: num = 101010
+        Output: 42
 
 
-    Constraints:
+        Constraints:
 
-    1 <= num <= 10^9
+        1 <= num <= 10^9
 
-    */
+        */
 
-    public static int BinaryToDecimal(int binary)
-    {
-        int decimalValue = 0;
-        int placeValue = 1;
-
-        while (binary > 0)
+        public static int BinaryToDecimal(int binary)
         {
-            int digit = binary % 10;
-            decimalValue += digit * placeValue;
-            placeValue *= 2;
-            binary /= 10;
+            // Initialize decimalValue to store the result
+            int decimalValue = 0;
+
+            // Initialize placeValue to keep track of the place value of each binary digit
+            int placeValue = 1;
+
+            // Iterate until the binary number is completely converted to decimal
+            while (binary > 0)
+            {
+                // Extract the rightmost digit of the binary number
+                int digit = binary % 10;
+
+                // Update decimalValue by adding the current digit multiplied by its place value
+                decimalValue += digit * placeValue;
+
+                // Move to the next place value (multiply by 2 for binary)
+                placeValue *= 2;
+
+                // Remove the rightmost digit from the binary number
+                binary /= 10;
+            }
+
+            // Return the decimal representation of the binary number
+            return decimalValue;
         }
 
-        return decimalValue;
-    }
 
 
-    /*
+        /*
 
-    Question:6
-    Given an integer array nums, return the maximum difference between two successive elements in its sorted form. If the array contains less than two elements, return 0.
-    You must write an algorithm that runs in linear time and uses linear extra space.
+        Question:6
+        Given an integer array nums, return the maximum difference between two successive elements in its sorted form. If the array contains less than two elements, return 0.
+        You must write an algorithm that runs in linear time and uses linear extra space.
 
-    Example 1:
+        Example 1:
 
-    Input: nums = [3,6,9,1]
-    Output: 3
-    Explanation: The sorted form of the array is [1,3,6,9], either (3,6) or (6,9) has the maximum difference 3.
-    Example 2:
+        Input: nums = [3,6,9,1]
+        Output: 3
+        Explanation: The sorted form of the array is [1,3,6,9], either (3,6) or (6,9) has the maximum difference 3.
+        Example 2:
 
-    Input: nums = [10]
-    Output: 0
-    Explanation: The array contains less than 2 elements, therefore return 0.
+        Input: nums = [10]
+        Output: 0
+        Explanation: The array contains less than 2 elements, therefore return 0.
 
 
-    Constraints:
+        Constraints:
 
-    1 <= nums.length <= 105
-    0 <= nums[i] <= 109
+        1 <= nums.length <= 105
+        0 <= nums[i] <= 109
 
-    */
+        */
 
-    public static int MaximumGap(int[] nums)
-    {
-        if (nums.Length < 2)
+        public static int MaximumGap(int[] nums)
         {
+            // Check if the array contains less than 2 elements
+            if (nums.Length < 2)
+            {
+                // If so, there are no gaps, return 0
+                return 0;
+            }
+
+            // Sort the input array in ascending order
+            Array.Sort(nums);
+
+            // Initialize a variable to store the maximum gap
+            int maxGap = 0;
+
+            // Iterate through the sorted array to find the maximum difference between adjacent elements
+            for (int i = 1; i < nums.Length; i++)
+            {
+                // Calculate the difference between the current element and the previous element
+                int currentGap = nums[i] - nums[i - 1];
+
+                // Update the maximum gap if the current gap is greater
+                maxGap = Math.Max(maxGap, currentGap);
+            }
+
+            // Return the maximum gap found
+            return maxGap;
+        }
+
+
+
+
+        /*
+
+        Question:7
+        Given an integer array nums, return the largest perimeter of a triangle with a non-zero area, formed from three of these lengths. If it is impossible to form any triangle of a non-zero area, return 0.
+
+        Example 1:
+
+        Input: nums = [2,1,2]
+        Output: 5
+        Explanation: You can form a triangle with three side lengths: 1, 2, and 2.
+        Example 2:
+
+        Input: nums = [1,2,1,10]
+        Output: 0
+        Explanation: 
+        You cannot use the side lengths 1, 1, and 2 to form a triangle.
+        You cannot use the side lengths 1, 1, and 10 to form a triangle.
+        You cannot use the side lengths 1, 2, and 10 to form a triangle.
+        As we cannot use any three side lengths to form a triangle of non-zero area, we return 0.
+
+        Constraints:
+
+        3 <= nums.length <= 104
+        1 <= nums[i] <= 106
+
+        */
+
+        public static int LargestPerimeter(int[] nums)
+        {
+            // Sort the input array in non-decreasing order.
+            Array.Sort(nums);
+
+            // Iterate over the sorted array in reverse order.
+            for (int i = nums.Length - 1; i >= 2; i--)
+            {
+                // Check if the sum of the two smaller sides is greater than the largest side.
+                if (nums[i - 2] + nums[i - 1] > nums[i])
+                {
+                    // If the condition is met, return the sum of the three sides, which represents the largest perimeter.
+                    return nums[i - 2] + nums[i - 1] + nums[i];
+                }
+            }
+
+            // If no valid triangle can be formed, return 0.
             return 0;
         }
 
-        Array.Sort(nums);
-
-        int maxGap = 0;
-
-        for (int i = 1; i < nums.Length; i++)
-        {
-            maxGap = Math.Max(maxGap, nums[i] - nums[i - 1]);
-        }
-
-        return maxGap;
-    }
-
-
-
-    /*
-
-    Question:7
-    Given an integer array nums, return the largest perimeter of a triangle with a non-zero area, formed from three of these lengths. If it is impossible to form any triangle of a non-zero area, return 0.
-
-    Example 1:
-
-    Input: nums = [2,1,2]
-    Output: 5
-    Explanation: You can form a triangle with three side lengths: 1, 2, and 2.
-    Example 2:
-
-    Input: nums = [1,2,1,10]
-    Output: 0
-    Explanation: 
-    You cannot use the side lengths 1, 1, and 2 to form a triangle.
-    You cannot use the side lengths 1, 1, and 10 to form a triangle.
-    You cannot use the side lengths 1, 2, and 10 to form a triangle.
-    As we cannot use any three side lengths to form a triangle of non-zero area, we return 0.
-
-    Constraints:
-
-    3 <= nums.length <= 104
-    1 <= nums[i] <= 106
-
-    */
-
-    public static int LargestPerimeter(int[] nums)
-    {
-        Array.Sort(nums);
-
-        for (int i = nums.Length - 1; i >= 2; i--)
-        {
-            if (nums[i - 2] + nums[i - 1] > nums[i])
-            {
-                return nums[i - 2] + nums[i - 1] + nums[i];
-            }
-        }
-
-        return 0; 
-    }
 
 
 
@@ -488,22 +560,29 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
+                // Continuously loop until all occurrences of 'part' are removed from the string 's'
                 while (s.Contains(part))
                 {
+                    // Find the index of the first occurrence of 'part' in the string 's'
                     int index = s.IndexOf(part);
-                 
+
+                    // If 'part' is found in 's'
                     if (index != -1)
                     {
+                        // Remove 'part' from 's' starting at the found index, with length equal to the length of 'part'
                         s = s.Remove(index, part.Length);
                     }
                 }
+                // Return the modified string with all occurrences of 'part' removed
                 return s;
             }
             catch (Exception)
             {
+                // If any exception occurs during the process, re-throw the exception
                 throw;
             }
         }
+
 
 
 
